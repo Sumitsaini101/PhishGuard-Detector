@@ -17,6 +17,11 @@ PhishGuard is a comprehensive, AI-powered cybersecurity suite designed for real-
 *   **GUI Framework:** CustomTkinter (Thread-safe implementation)
 *   **Networking:** Socket, Requests, Python-Whois
 
+## ⚠️ Important Note for Windows Users
+
+The **Network Radar** feature relies on sending raw Layer-2 ARP packets. To use this specific feature on a Windows operating system, the system must have the **[Npcap driver](https://npcap.com/#download)** installed (this is often pre-installed if you have Wireshark). 
+*(Linux and macOS users do not need Npcap, but may need to run the application with `sudo` privileges).*
+
 ## ⚙️ Installation & Usage
 
 To run this application locally, you will need Python installed on your system.
