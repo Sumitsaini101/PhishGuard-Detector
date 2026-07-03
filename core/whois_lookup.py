@@ -1,40 +1,47 @@
 import whois
+from urllib.parse import urlparse
 
-def get_domain_intel(domain):
+def get_domain_intel(domain_input):
     """
-    Performs a WHOIS lookup to return registration metadata.
+    Fetches WHOIS data for a given domain.
+    Includes auto-cleanup so if a user pastes 'https://google.com/login',
+    it automatically strips it down to just 'google.com'.
     """
     try:
-        # Query the WHOIS database
-        w = whois.whois(domain)
+        # 1. Clean up the input (Remove https://, www, and paths)
+        domain_input = domain_input.strip()
+        if "http" in domain_input:
+            parsed = urlparse(domain_input)
+            clean_domain = parsed.netloc
+        else:
+            clean_domain = domain_input
+            
+        # Strip 'www.' if it exists, as WHOIS prefers the root domain
+        if clean_domain.startswith("www."):
+            clean_domain = clean_domain[4:]
+
+        # 2. Fetch the data
+        w = whois.whois(clean_domain)
         
-        # Format the data into a readable dictionary
-        intel = {
-            "registrar": w.registrar,
-            "creation_date": w.creation_date,
-            "expiration_date": w.expiration_date,
-            "whois_server": w.whois_server
+        # 3. Handle cases where the domain isn't registered
+        if w.domain_name is None:
+            return False, "Domain not found or not registered."
+            
+        # 4. Format the output safely
+        data = {
+            "creation_date": w.creation_date[0] if type(w.creation_date) == list else w.creation_date,
+            "registrar": w.registrar
         }
         
-        # Handle lists (sometimes WHOIS returns a list for dates)
-        if isinstance(intel["creation_date"], list):
-            intel["creation_date"] = intel["creation_date"][0]
-            
-        return True, intel
-    
+        return True, data
+        
     except Exception as e:
         return False, str(e)
 
-# ==========================================
-# QUICK TEST
-# ==========================================
+# Quick Test
 if __name__ == "__main__":
-    domain = input("Enter domain to investigate (e.g., google.com): ").strip()
-    success, data = get_domain_intel(domain)
-    
+    success, data = get_domain_intel("https://www.github.com/login")
     if success:
-        print(f"\n--- OSINT REPORT: {domain} ---")
-        for key, value in data.items():
-            print(f"{key.upper()}: {value}")
+        print(f"Success! Created: {data['creation_date']}, Registrar: {data['registrar']}")
     else:
-        print(f"[-] Error: {data}")
+        print(f"Failed: {data}")
