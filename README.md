@@ -1,14 +1,37 @@
-# PhishGuard | Enterprise Security Dashboard
+# 🛡️ PhishGuard: Enterprise Security Dashboard
 
-PhishGuard is a comprehensive, AI-powered cybersecurity suite designed for real-time threat analysis, network reconnaissance, and domain intelligence. Built with a highly responsive, multi-threaded "Cyber-SOC" graphical interface.
+PhishGuard is a comprehensive, multi-tool cybersecurity application designed to detect zero-day phishing threats, perform local network reconnaissance, audit endpoint vulnerabilities, and enforce strict Zero-Trust Identity Access Management (IAM).
 
-## 🚀 Core Features
+Built with **Python**, **CustomTkinter**, and **Machine Learning (Random Forest)**.
 
-*   **AI Threat Intelligence:** Utilizes a Random Forest Machine Learning model trained on over 500,000 data points. It extracts 9 advanced architectural features from URLs to detect zero-day phishing links with high precision.
-*   **Network Radar:** Performs Layer-2 ARP discovery to map out local network devices, returning IP and MAC addresses in real-time.
-*   **Vulnerability Scanner:** Multi-threaded TCP port scanner that identifies open ports and exposed services on target IPs.
-*   **Link Interceptor:** Safely unrolls masked short-links (e.g., bit.ly) to reveal the true destination without triggering malicious payloads.
-*   **Domain OSINT:** Fetches global WHOIS metadata to verify domain registration dates, registrars, and server infrastructure.
+---
+
+## ✨ Core Features
+
+### 1. Zero-Trust 3-Factor Authentication (IAM)
+* **Factor 1 (Knowledge):** SHA-256 Hashed Password Verification.
+* **Factor 2 (Possession):** SMTP-based Email OTP Verification.
+* **Factor 3 (Inherence):** Cryptographic lock to the user's physical Network Card MAC Address.
+* *Includes a dynamic device-transfer protocol for authorized hardware migration.*
+
+### 2. AI Threat Intelligence (Zero-Day URL Scanner)
+* Extracts 9 discrete lexical and structural features from suspected URLs.
+* Scores threats using a trained Random Forest Classifier model.
+* Operates entirely offline without relying on external API blacklists.
+
+### 3. Layer-2 Network Radar
+* Broadcasts raw ARP packets across the local subnet.
+* Discovers hidden devices, identifying IP and physical MAC addresses.
+
+### 4. Vulnerability Port Scanner
+* Multi-threaded TCP port matrix auditor.
+* Quickly maps open ports and active services on target IP addresses or domains.
+
+### 5. OSINT & Link Interceptor
+* **Link Interceptor:** Safely unrolls shortened/obfuscated URLs (e.g., bit.ly) to reveal their true destination without executing malicious payloads.
+* **Domain OSINT:** Queries global WHOIS databases to extract domain creation dates and registrar identities.
+
+---
 
 ## 💻 Technical Stack
 
@@ -17,43 +40,61 @@ PhishGuard is a comprehensive, AI-powered cybersecurity suite designed for real-
 *   **GUI Framework:** CustomTkinter (Thread-safe implementation)
 *   **Networking:** Socket, Requests, Python-Whois
 
-## ⚠️ Important Note for Windows Users
+---
 
-The **Network Radar** feature relies on sending raw Layer-2 ARP packets. To use this specific feature on a Windows operating system, the system must have the **[Npcap driver](https://npcap.com/#download)** installed (this is often pre-installed if you have Wireshark). 
-*(Linux and macOS users do not need Npcap, but may need to run the application with `sudo` privileges).*
+## ⚠️ Important Prerequisites
 
-## ⚙️ Installation & Usage
+1. **For Windows Users (Network Radar):** 
+   The Network Radar relies on sending raw Layer-2 ARP packets. To use this feature on Windows, the system must have the **[Npcap driver](https://npcap.com/#download)** installed (often pre-installed if you have Wireshark). 
+2. **Gmail App Password (for 3FA OTP):**
+   To use the Registration and Login systems, the app requires an SMTP server to send OTPs. You must generate a 16-digit Google App Password.
 
-To run this application locally, you will need Python installed on your system.
+---
+
+## ⚙️ Installation & Setup
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/Sumitsaini101/PhishGuard-Detector.git
-cd PhishGuard-Detector
+git clone https://github.com/YOUR_USERNAME/PhishGuard.git
+cd PhishGuard
 ```
 
-### 2. Install the required dependencies
+### 2. Install required dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Launch the dashboard
+### 3. Configure the Authentication Engine
+Before running the application, you must provide your SMTP credentials to allow the system to send OTPs.
+
+1. Open `auth_manager.py` in your code editor.
+2. Locate the `send_otp` function.
+3. Replace the placeholder credentials with your real testing email and 16-digit App Password:
+
+```python
+sender_email = "your_actual_email@gmail.com" 
+app_password = "your_16_digit_app_password"
+```
+
+### 4. Launch the Dashboard
 ```bash
 python gui/app_gui.py
 ```
 
-## 🧠 AI Model Interpretability
-The phishing detection engine relies on 9 heavily engineered features. Ranked by decision impact:
+---
 
-1. Domain Length
-2. Total URL Length
-3. Total Dots (Subdomain indicator)
-4. Suspicious Keyword Count
-5. Hyphens in Domain
-6. Subdomain Count
-7. HTTPS Status
-8. Raw IP Address Detection
-9. Presence of '@' Symbol
+## 🚀 Usage Guide
+
+1. **Device Enrollment:** Launch the application and click **"Register Device"** to bind your hardware MAC address and verify your email via OTP.
+2. **Secure Login:** Log in using your Username, Password, and the fresh 6-digit Email OTP sent to your registered inbox.
+3. **Dashboard Navigation:** Utilize the intuitive CustomTkinter sidebar navigation to switch smoothly between modules:
+   * **AI Scanner:** Paste suspicious URLs to evaluate zero-day threats.
+   * **Network Radar:** Scan the local subnet to audit connected assets.
+   * **Port Scanner:** Audit specific IPs or domains for exposed entry points.
+   * **OSINT Hub:** Investigate domain ownership timelines and safely expand short links.
 
 ---
 
+## 🛑 Disclaimer
+
+This tool is developed for educational and authorized enterprise auditing purposes only. Scanning networks or endpoints without prior explicit permission from the owner is illegal and unethical. Use responsibly.
