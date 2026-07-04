@@ -55,7 +55,7 @@ Built with **Python**, **CustomTkinter**, and **Machine Learning (Random Forest)
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/PhishGuard.git
+git clone https://github.com/Sumitsaini101/PhishGuard-Detector
 cd PhishGuard
 ```
 
